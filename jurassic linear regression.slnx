@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="jurassic linear regression.vcxproj" />
+  <Project Path="jurassic linear regression.vcxproj" Id="69cda6ff-64e8-459e-91bd-bb2255bab483" />
 </Solution>
