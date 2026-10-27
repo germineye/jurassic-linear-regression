@@ -1,6 +1,6 @@
 #include <cmath>
 #include <iomanip>
-#include <iostream>
+#include <fstream>
 #include <vector>
 
 struct Sample {
@@ -65,37 +65,39 @@ bool train(const std::vector<Sample>& samples, std::vector<double>& weights, dou
 }
 
 int main() {
+    std::ifstream input("input.txt"); // đọc dữ liệu huấn luyện và đầu vào cần dự đoán
+    std::ofstream output("output.txt"); // tự tạo file nếu chưa có, ghi đè nếu đã có
+
     int nSamples, nFeatures;
-    std::cin >> nSamples >> nFeatures;
+    input >> nSamples >> nFeatures;
 
     std::vector<Sample> samples(nSamples, Sample(nFeatures));
     for (int i = 0; i < nSamples; i++) {
         for (int j = 0; j < nFeatures; j++) {
-            std::cin >> samples[i].x[j];
+            input >> samples[i].x[j];
         }
-        std::cin >> samples[i].y;
+        input >> samples[i].y;
     }
 
     std::vector<double> weights(nFeatures, 0.0);
     double bias = 0.0;
     if (!train(samples, weights, bias)) {
-        std::cerr << "training did not converge within the iteration limit\n";
+        output << "training did not converge within the iteration limit\n";
         return 1;
     }
 
-    std::cout << std::setprecision(10);
-    std::cout << "y = " << bias;
+    output << std::setprecision(10);
+    output << "y = " << bias;
     for (int j = 0; j < nFeatures; j++) {
-        std::cout << (weights[j] < 0 ? " - " : " + ") << std::abs(weights[j]) << " * x" << j + 1;
+        output << (weights[j] < 0 ? " - " : " + ") << std::abs(weights[j]) << " * x" << j + 1;
     }
-    std::cout << '\n';
+    output << '\n';
 
-    std::cout << "enter " << nFeatures << " features to predict:\n";
     std::vector<double> x(nFeatures);
     for (int j = 0; j < nFeatures; j++) {
-        std::cin >> x[j];
+        input >> x[j];
     }
 
-    std::cout << "prediction = " << predict(x, weights, bias) << '\n';
+    output << "prediction = " << predict(x, weights, bias) << '\n';
     return 0;
 }
